@@ -1,0 +1,48 @@
+server:
+  host: "0.0.0.0"
+  port: 3008
+  proxyHost:
+  proxyPort:
+  apiPrefix: /metrics/api/v1
+logging:
+  # Comment the elk line to print the log in stdout
+  elk: 'http://localhost:9200'
+  # Use below when run inside docker
+  #elk: 'http://elk:9200'
+  serializers:
+    request_body: 'flatten'
+    response_body: 'flatten'
+    request_header: 'flatten'
+    response_header: 'flatten'
+    config: 'flatten'
+  redact:
+    - secret
+    - config.db.password
+    - userId
+    - auth.jwtSecret
+    - password
+    - logging.elasticCloudApiKey
+auth:
+  jwtVerify:
+    - ABCDEFG
+    - |-
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhfo4mDs3uVwZUUQW3SSQ
+      gEjPbU6+2vzPFbyfXjOclsuhRJBWmOvFd+z3izZdJ0gxEOYLbB+0AvhFD9tJOILX
+      /iWXzcNqNctvR9WCH4mJmbmjpasN7hYS+v2+rTZ8hdULZfTiPgxG57mngY1xk9qq
+      06G622T49tZpoMHKdTPefAxW/kttMNTgm90430R79HQoYIbDTfaxSHThjV0N9IO6
+      4oegLUTBSbA4y67Q5aJxGA+GaV2FsEmT2XkGi0TrPb0yFaKA+cUTlsqDFt1nQQHz
+      Blp3s6IhBpbbBngPmbeIFqHqsNJ2rmz6Dt/36XlYm8ENjeNdHhNUhjBUwSxh5R3H
+      rQIDAQAB
+      -----END PUBLIC KEY-----
+  jwtIssuer: ACE
+db:
+  uri: 'mongodb://localhost:27017/test'
+  user: ''
+  password: ''
+  poolSize: 10
+  ssl: true
+  replicaSet: null
+  authSource: 'admin'
+
+

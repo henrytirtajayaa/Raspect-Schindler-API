@@ -1,0 +1,8 @@
+db:
+  uri: 'mongodb+srv://ete-raspect.nwfxp.mongodb.net/raspect?retryWrites=true&w=majority'
+  user: 'raspect-backend'
+  password: 'j2eZhwXn9rrYa8yjYqzgGSNTbAVehAB8'
+  authSource: 'admin'
+  ssl: true
+
+

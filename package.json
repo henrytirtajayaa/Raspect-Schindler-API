@@ -1,0 +1,49 @@
+{
+  "name": "schindler-metric-api",
+  "version": "1.0.0",
+  "main": "index.mjs",
+  "author": "Raspect",
+  "license": "UNLICENSED",
+  "scripts": {
+    "start": "node src/app.mjs",
+    "start:dev": "NODE_CONFIG_ENV=development nodemon src/app.mjs | pino-pretty",
+    "test": "echo \"Error: no test specified\" && exit 1 &&",
+    "lint": "eslint src/**/*",
+    "lint:fix": "eslint src/**/* --fix",
+    "lint:test": "eslint test/**/* --fix"
+  },
+  "dependencies": {
+    "casbin": "^5.11.5",
+    "config": "^3.3.3",
+    "fast-redact": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.13.1",
+    "koa-bodyparser": "^4.3.0",
+    "koa-compose": "^4.1.0",
+    "koa-helmet": "^6.0.0",
+    "koa-jwt": "^4.0.0",
+    "koa-no-cache": "^2.0.0",
+    "koa-oas3": "^2.2.0",
+    "koa-pino-logger": "^3.0.0",
+    "koa-requestid": "^2.1.0",
+    "koa-router": "^10.0.0",
+    "lodash": "^4.17.20",
+    "moment": "^2.29.1",
+    "moment-timezone": "^0.5.33",
+    "mongo-sanitize": "^1.1.0",
+    "mongodb-memory-server": "^7.5.1",
+    "mongoose": "^5.11.12",
+    "oas3-chow-chow": "^1.2.1",
+    "pino": "^6.11.0",
+    "pino-multi-stream": "^5.3.0",
+    "simple-async-sleep": "^1.0.0"
+  },
+  "devDependencies": {
+    "ava": "^3.15.0",
+    "eslint": "^7.18.0",
+    "eslint-config-airbnb-base-mjs": "^3.0.0",
+    "eslint-plugin-import": "^2.22.1",
+    "nodemon": "^2.0.7",
+    "pino-pretty": "^4.3.0"
+  }
+}

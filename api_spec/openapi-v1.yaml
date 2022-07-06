@@ -1,0 +1,222 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Metrics API for query
+  license:
+    name: Proprietary
+servers:
+  - url: /
+paths:
+  /metrics/api/v1/teams/{teamId}/metrics:
+    post:
+      security:
+        - bearerAuth: []
+      summary: Retrieve the metrics information by providing list of criteria
+      operationId: getMetrics
+      tags:
+        - metrics
+      parameters:
+        - in: path
+          name: teamId
+          schema:
+            type: string
+          required: true
+          description: Team ID represent the workspace within the asset
+        - in: query
+          name: startDate
+          schema:
+            type: string
+          required: true
+          description: Start date for the data to return
+        - in: query
+          name: endDate
+          schema:
+            type: string
+          required: true
+          description: End date for the data to return
+        - in: query
+          name: outputTimezone
+          schema:
+            type: string
+          description: Tell which timezone the result data need to return. Default to +08:00
+      requestBody:
+        description: List of searching criteria
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchCriteria'
+      responses:
+        '200':
+          description: Token Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResult'
+        '401':
+          description: Unauthorised Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedError'
+        '500':
+          description: Business Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    bearerAuth:            # arbitrary name for the security scheme
+      type: http
+      scheme: bearer
+      bearerFormat: JWT    # optional, arbitrary value for documentation purposes
+  schemas:
+    SearchCriteria:
+      type: array
+      description: Seearch Criteria which contains name for the query and other parameters
+      items:
+        type: object
+        discriminator:
+          propertyName: name
+        required:
+          - name
+        oneOf:
+          - $ref: '#/components/schemas/PeopleCountByDateQuery'
+          - $ref: '#/components/schemas/AlertCountByDateQuery'
+          - $ref: '#/components/schemas/AlertCountByLocationQuery'
+          - $ref: '#/components/schemas/AlertCountByTypeQuery'
+          - $ref: '#/components/schemas/AlertQuery'
+          - $ref: '#/components/schemas/PowerConsumptionQuery'
+          - $ref: '#/components/schemas/WeatherQuery'
+          - $ref: '#/components/schemas/SwitchboxMetricsQuery'
+          - $ref: '#/components/schemas/TemperatureQuery'
+          - $ref: '#/components/schemas/HumidityQuery'
+    PeopleCountByDateQuery:
+      description: List the Sum of People Count within the date range
+      type: object
+      properties:
+        name:
+          enum:
+            - peopleCountByDate
+        hierarchyId:
+          type: string
+          description: Floor ID to constraint the sum of people count within that area
+    AlertCountByDateQuery:
+      description: List the Sum of Alert Count within the date range
+      type: object
+      properties:
+        name:
+          enum:
+            - alertCountByDate
+    AlertCountByLocationQuery:
+      description: Get the sum of alert grouped by location
+      type: object
+      properties:
+        name:
+          enum:
+            - alertCountByLocation
+    AlertCountByTypeQuery:
+      description: Get the sum of alert grouped by type of measurement
+      type: object
+      properties:
+        name:
+          enum:
+            - alertCountByType
+    AlertQuery:
+      description: Get the list of alert
+      type: object
+      properties:
+        name:
+          enum:
+            - alert
+        status:
+          enum:
+            - Resumed
+            - Active
+        page:
+          type: number
+        limit:
+          type: number
+    PowerConsumptionQuery:
+      description: Get the power consumption
+      type: object
+      properties:
+        name:
+          enum:
+            - powerConsumption
+    WeatherQuery:
+      description: Get the current weather info
+      type: object
+      properties:
+        name:
+          enum:
+            - weather
+        countryCode:
+          type: string
+        regionCode:
+          type: string
+      required:
+        - countryCode
+        - regionCode
+    SwitchboxMetricsQuery:
+      description: Get the current switchbox info
+      type: object
+      properties:
+        name:
+          enum:
+            - switchboxMetrics
+    TemperatureQuery:
+      description: Get the current temperature info
+      type: object
+      properties:
+        name:
+          enum:
+            - temperatureMetrics
+    HumidityQuery:
+      description: Get the current humidity info
+      type: object
+      properties:
+        name:
+          enum:
+            - hhumidityMetrics
+    SearchResult:
+      type: object
+      description: Metrics Search Result
+      additionalProperties:
+        oneOf:
+          - $ref: '#/components/schemas/Record'
+          - $ref: '#/components/schemas/Error'
+    Record:
+      type: object
+      properties:
+        total:
+          type: number
+        data:
+          type: array
+          items:
+            type: object
+      required:
+        - data
+    Error:
+      type: object
+      description: Business Error Object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
+    UnauthorizedError:
+      type: object
+      description: Access token is missing or invalid
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
